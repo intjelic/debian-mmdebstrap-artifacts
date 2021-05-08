@@ -28,7 +28,7 @@ jobs:
       - name: Install dependencies
         run: |
           apt-get update
-          apt-get install -y mmdebstrap
+          apt-get install -y --no-install-recommends mmdebstrap binfmt-support qemu-user-static
 
       - name: Compute system packages (armhf)
         if: ${{ matrix.arch == 'armhf' }}

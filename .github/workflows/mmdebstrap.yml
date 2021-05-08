@@ -24,7 +24,9 @@ jobs:
 
     steps:
       - name: Install dependencies
-        run: sudo apt-get install -y mmdebstrap
+        run: |
+          apt-get update
+          apt-get install -y mmdebstrap
 
       - name: Create artifact
         run: |

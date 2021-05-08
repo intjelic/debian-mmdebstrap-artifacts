@@ -22,6 +22,9 @@ jobs:
         # variant: ["essential", "required", "important", "standard"]
         # network: ["ifupdown", "systemd-networkd", "network-manager"]
 
+    env:
+      ARTIFACT_NAME: debian-${{ matrix.version }}-${{ matrix.variant }}-${{ matrix.arch }}
+
     steps:
       - name: Install dependencies
         run: |
@@ -38,4 +41,11 @@ jobs:
             --variant=${{ matrix.variant }} \
             --components="main" \
             --include=$SYSTEM_PKGS,$MAIN_PKGS,$NETWORK_PKGS \
-            ${{ matrix.version }} debian-${{ matrix.version }}-${{ matrix.variant }}-${{ matrix.arch }}.tar
+            ${{ matrix.version }} ${{ env.ARTIFACT_NAME }}.tar
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.ARTIFACT_NAME }}
+          path: ${{ env.ARTIFACT_NAME }}.tar
+          retention-days: 1

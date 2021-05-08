@@ -13,11 +13,10 @@ jobs:
 
     strategy:
       matrix:
-        arch: ["amd64"]
+        arch: ["armhf", "arm64", "amd64"]
         version: ["buster"]
         variant: ["standard"]
         network: ["ifupdown"]
-        # arch: ["armhf", "arm64", "amd64"]
         # version: ["stretch", "buster", "bullseye"]
         # variant: ["essential", "required", "important", "standard"]
         # network: ["ifupdown", "systemd-networkd", "network-manager"]
@@ -31,9 +30,20 @@ jobs:
           apt-get update
           apt-get install -y mmdebstrap
 
+      - name: Compute system packages (armhf)
+        if: ${{ matrix.arch == 'armhf' }}
+        run: echo "system_packages=systemd-sysv,udev,linux-image-armmp-lpae:armhf" >> $GITHUB_ENV
+
+      - name: Compute system packages (arm64)
+        if: ${{ matrix.arch == 'arm64' }}
+        run: echo "system_packages=systemd-sysv,udev,linux-image-arm64" >> $GITHUB_ENV
+
+      - name: Compute system packages (amd64)
+        if: ${{ matrix.arch == 'amd64' }}
+        run: echo "system_packages=systemd-sysv,udev,linux-image-amd64" >> $GITHUB_ENV
+
       - name: Create filesystem
         run: |
-          SYSTEM_PKGS=systemd-sysv,udev,linux-image-amd64
           MAIN_PKGS=debian-archive-keyring,initramfs-tools,kmod,e2fsprogs,btrfs-progs,locales,tzdata,apt-utils,whiptail,debconf-i18n,keyboard-configuration,console-setup
           NETWORK_PKGS=ifupdown,isc-dhcp-client
 
@@ -42,7 +52,7 @@ jobs:
             --architectures=${{ matrix.arch }} \
             --variant=${{ matrix.variant }} \
             --components="main" \
-            --include=$SYSTEM_PKGS,$MAIN_PKGS,$NETWORK_PKGS \
+            --include=${{ env.system_packages }},$MAIN_PKGS,$NETWORK_PKGS \
             ${{ matrix.version }} artifact/${{ env.ARTIFACT_NAME }}
 
       - name: Extract boot files

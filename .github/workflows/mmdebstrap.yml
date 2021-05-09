@@ -13,10 +13,11 @@ jobs:
 
     strategy:
       matrix:
-        arch: ["armhf", "arm64", "amd64"]
+        arch: ["arm64", "amd64"]
         version: ["buster"]
         variant: ["standard"]
         network: ["ifupdown"]
+        # arch: ["armhf", "arm64", "amd64"]
         # version: ["stretch", "buster", "bullseye"]
         # variant: ["essential", "required", "important", "standard"]
         # network: ["ifupdown", "systemd-networkd", "network-manager"]
@@ -25,7 +26,17 @@ jobs:
       ARTIFACT_NAME: debian-${{ matrix.version }}-${{ matrix.variant }}-${{ matrix.arch }}
 
     steps:
-      - name: Install dependencies
+      - name: Install dependencies (amd64)
+        if: ${{ matrix.arch == 'amd64' }}
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends mmdebstrap
+
+      # The mmdebstrap tool needs binfmt-support and qemu-user-static packages
+      # installed when creating Debian filesystem for an architecture different
+      # than the host architecture.
+      - name: Install dependencies (not amd64)
+        if: ${{ matrix.arch != 'amd64' }}
         run: |
           apt-get update
           apt-get install -y --no-install-recommends mmdebstrap binfmt-support qemu-user-static

@@ -13,10 +13,10 @@ jobs:
 
     strategy:
       matrix:
-        arch: ["arm64", "amd64"]
+        arch: ["amd64"]
         version: ["buster"]
         variant: ["standard"]
-        network: ["ifupdown"]
+        network: ["ifupdown", "systemd-networkd", "network-manager"]
         # arch: ["armhf", "arm64", "amd64"]
         # version: ["stretch", "buster", "bullseye"]
         # variant: ["essential", "required", "important", "standard"]
@@ -53,17 +53,28 @@ jobs:
         if: ${{ matrix.arch == 'amd64' }}
         run: echo "system_packages=systemd-sysv,udev,linux-image-amd64" >> $GITHUB_ENV
 
+      - name: Compute network packages (ifupdown)
+        if: ${{ matrix.network == 'ifupdown' }}
+        run: echo "network_packages=ifupdown,isc-dhcp-client" >> $GITHUB_ENV
+
+      - name: Compute network packages (systemd-networkd)
+        if: ${{ matrix.network == 'systemd-networkd' }}
+        run: echo "network_packages=systemd" >> $GITHUB_ENV
+
+      - name: Compute network packages (network-manager)
+        if: ${{ matrix.network == 'network-manager' }}
+        run: echo "network_packages=network-manager" >> $GITHUB_ENV
+
       - name: Create filesystem
         run: |
           MAIN_PKGS=debian-archive-keyring,initramfs-tools,kmod,e2fsprogs,btrfs-progs,locales,tzdata,apt-utils,whiptail,debconf-i18n,keyboard-configuration,console-setup
-          NETWORK_PKGS=ifupdown,isc-dhcp-client
 
           mkdir artifact
           mmdebstrap \
             --architectures=${{ matrix.arch }} \
             --variant=${{ matrix.variant }} \
             --components="main" \
-            --include=${{ env.system_packages }},$MAIN_PKGS,$NETWORK_PKGS \
+            --include=${{ env.system_packages }},${{ env.network_packages }},$MAIN_PKGS \
             ${{ matrix.version }} artifact/${{ env.ARTIFACT_NAME }}
 
       - name: Set root password (amd64)

@@ -66,6 +66,26 @@ jobs:
             --include=${{ env.system_packages }},$MAIN_PKGS,$NETWORK_PKGS \
             ${{ matrix.version }} artifact/${{ env.ARTIFACT_NAME }}
 
+      - name: Set root password (amd64)
+        if: ${{ matrix.arch == 'amd64' }}
+        run: chroot artifacts/${{ env.ARTIFACT_NAME }} /bin/bash -c "echo root:root | chpasswd"
+
+      - name: Set root password (armhf)
+        if: ${{ matrix.arch == 'armhf' }}
+        run: |
+          cp /usr/bin/qemu-arm-static artifact/${{ env.ARTIFACT_NAME }}/usr/bin
+          chroot artifact/${{ env.ARTIFACT_NAME }} qemu-arm-static /bin/bash -c "echo root:root | chpasswd"
+
+          rm artifact/${{ env.ARTIFACT_NAME }}/usr/bin/qemu-arm-static
+
+      - name: Set root password (arm64)
+        if: ${{ matrix.arch == 'arm64' }}
+        run: |
+          cp /usr/bin/qemu-aarch64-static artifact/${{ env.ARTIFACT_NAME }}/usr/bin
+          chroot artifact/${{ env.ARTIFACT_NAME }} qemu-aarch64-static /bin/bash -c "echo root:root | chpasswd"
+
+          rm artifact/${{ env.ARTIFACT_NAME }}/usr/bin/qemu-aarch64-static
+
       - name: Extract boot files
         run: |
           mv artifact/${{ env.ARTIFACT_NAME }}/boot/* artifact

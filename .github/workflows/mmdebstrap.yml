@@ -68,7 +68,7 @@ jobs:
 
       - name: Set root password (amd64)
         if: ${{ matrix.arch == 'amd64' }}
-        run: chroot artifacts/${{ env.ARTIFACT_NAME }} /bin/bash -c "echo root:root | chpasswd"
+        run: chroot artifact/${{ env.ARTIFACT_NAME }} /bin/bash -c "echo root:root | chpasswd"
 
       - name: Set root password (armhf)
         if: ${{ matrix.arch == 'armhf' }}

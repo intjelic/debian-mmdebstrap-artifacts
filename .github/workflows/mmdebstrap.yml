@@ -72,7 +72,7 @@ jobs:
           rm -r artifact/${{ env.ARTIFACT_NAME }}/boot
 
       - name: Create artifact
-        run: (cd artifact && tar -czvf ../${{ env.ARTIFACT_NAME }}.tgz .)
+        run: (cd artifact && tar -czvf ../${{ env.ARTIFACT_NAME }}.tar.gz *)
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v2

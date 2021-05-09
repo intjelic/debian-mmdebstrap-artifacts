@@ -98,5 +98,5 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: ${{ env.ARTIFACT_NAME }}
-          path: ${{ env.ARTIFACT_NAME }}.tgz
+          path: ${{ env.ARTIFACT_NAME }}.tar.gz
           retention-days: 1

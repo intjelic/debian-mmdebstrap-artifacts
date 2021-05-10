@@ -13,14 +13,10 @@ jobs:
 
     strategy:
       matrix:
-        arch: ["amd64"]
-        version: ["buster"]
-        variant: ["standard"]
-        network: ["ifupdown", "systemd-networkd", "network-manager"]
-        # arch: ["armhf", "arm64", "amd64"]
-        # version: ["stretch", "buster", "bullseye"]
-        # variant: ["essential", "required", "important", "standard"]
-        # network: ["ifupdown", "systemd-networkd", "network-manager"]
+        arch: ["armhf", "arm64", "amd64"]
+        version: ["stretch", "buster", "bullseye"]
+        variant: ["essential", "required", "important", "standard"]
+        network: ["ifupdown"] # other suppoted values are "systemd-networkd" and "network-manager"
 
     env:
       ARTIFACT_NAME: debian-${{ matrix.version }}-${{ matrix.variant }}-${{ matrix.arch }}

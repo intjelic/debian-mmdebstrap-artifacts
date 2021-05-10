@@ -5,6 +5,8 @@ tool, quick and easy.
 
 > The `mmdebstrap` does not work consistently well on OSes other than Debian. Therefore, it's easier to work with a Docker container... or simply let **Github Actions** does the work.
 
+**Download Artifacts:** https://github.com/intjelic/debian-mmdebstrap-artifacts/actions (pick the last excecuted workflow and then pick the variation of the artifact you're interested in).
+
 The 'mmdebstrap' tool is an alternative to 'debootstrap' to create chrootable
 Debian filesystems. The advantage of mmdebstrap is that it's also able to
 create them for different architectures other than the host architecture.

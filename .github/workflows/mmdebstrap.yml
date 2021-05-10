@@ -17,7 +17,7 @@ jobs:
       matrix:
         arch: ["armhf", "arm64", "amd64"]
         version: ["stretch", "buster", "bullseye"]
-        variant: ["essential", "required", "important", "standard"]
+        variant: ["required", "important", "standard"]
         network: ["ifupdown"] # other suppoted values are "systemd-networkd" and "network-manager"
 
     env:

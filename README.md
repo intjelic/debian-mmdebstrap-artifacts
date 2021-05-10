@@ -81,9 +81,9 @@ change the architecture and the Debian version to be installed (e.g `armhf`,
 `arm64`, `amd64`, `stretch`, `buster` and `bullseye`).
 
 Next, change the `variant` variable, to select the system packages to install.
-The `standard` value is the default for debootstrap, and values `essential`,
-`required` and `important` are also supported. Consult mmdebstrap documentation
-for more information.
+The `standard` value is the default for debootstrap, and values `required` and
+`important` are also supported. Consult mmdebstrap documentation for more
+information.
 
 For a real desktop installation, you might want to use different network
 settings, which can also be adjusted in the matrix, use either `ifupdown`,

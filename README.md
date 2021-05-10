@@ -78,7 +78,7 @@ the `github/workflows/mmdebstrap.yml` file and it can be changed as needed.
 Adjust the matrix to produce only the artifacts that you need. It might get
 expensive if the matrix is producing too many jobs. Notably, you'll want to
 change the architecture and the Debian version to be installed (e.g `armhf`,
-`arm64`, `amd64`, `stretch`, `buster` and `bullseye`).
+`arm64`, `amd64`, `stretch` and `buster`).
 
 Next, change the `variant` variable, to select the system packages to install.
 The `standard` value is the default for debootstrap, and values `required` and
